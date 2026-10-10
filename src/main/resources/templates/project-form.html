@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 16px;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1d4ed8;
+        }
+
+        label {
+            display: block;
+            margin: 20px 0 8px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font: inherit;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        button, .cancel {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 18px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .cancel {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .error {
+            padding: 12px;
+            border-radius: 7px;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1 th:text="${pageTitle}">Add Project</h1>
+
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <form th:action="${formAction}" method="post">
+
+        <input type="hidden" name="id"
+               th:if="${project.id > 0}"
+               th:value="${project.id}">
+
+        <label for="name">Project Name</label>
+        <input type="text" id="name" name="name"
+               th:value="${project.name}"
+               maxlength="150" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description"
+                  maxlength="2000"
+                  required
+                  th:text="${project.description}"></textarea>
+
+        <label for="status">Project Status</label>
+        <select id="status" name="status" required>
+            <option value="ACTIVE"
+                    th:selected="${project.status == 'ACTIVE'}">
+                Active
+            </option>
+            <option value="IN_PROGRESS"
+                    th:selected="${project.status == 'IN_PROGRESS'}">
+                In Progress
+            </option>
+            <option value="COMPLETED"
+                    th:selected="${project.status == 'COMPLETED'}">
+                Completed
+            </option>
+            <option value="ON_HOLD"
+                    th:selected="${project.status == 'ON_HOLD'}">
+                On Hold
+            </option>
+        </select>
+
+        <div class="buttons">
+            <button type="submit">Save Project</button>
+            <a class="cancel" href="/projects">Cancel</a>
+        </div>
+
+    </form>
+
+</div>
+</body>
+</html>

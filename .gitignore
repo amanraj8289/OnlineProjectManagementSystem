@@ -1,0 +1,22 @@
+# Maven build output
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Logs
+*.log
+logs/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+application-local.properties
+application-local.yml
+secrets.properties
+src/com/codenexus/projectmanagement/service/PasswordSetup.java
+/src/com/codenexus/projectmanagement/service/PasswordSetup.java
+/src/com/codenexus/projectmanagement/dao/TestConnection.java/src/com/codenexus/projectmanagement/service/PasswordSetup.java
