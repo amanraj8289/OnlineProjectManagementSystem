@@ -1,85 +1,53 @@
 # Online Project Management System
 
-A web-based project management application built using Java, Spring Boot, Thymeleaf, and MySQL. It allows users to manage projects and tasks through a simple web interface.
+A web-based project and task management application built using Java, Spring Boot, Thymeleaf, and MySQL.
 
 ## Features
 
 - User login with password verification
-- Dashboard displaying the logged-in user's name and role
-- Create, view, update, and delete projects
-- Create, view, update, and delete tasks
-- Task status management: Pending, In Progress, and Completed
-- MySQL database integration
-- Responsive HTML and CSS interface
+- Role-based user information
+- View and manage projects
+- Create, edit, and delete tasks
+- MySQL database connectivity
+- Web interface using HTML and Thymeleaf
 
-## Tech Stack
+## Technologies Used
 
-- **Backend:** Java, Spring Boot, JDBC
-- **Frontend:** HTML, CSS, Thymeleaf
-- **Database:** MySQL
-- **Build Tool:** Maven
-- **IDE:** IntelliJ IDEA
+- Java 17
+- Spring Boot
+- Thymeleaf
+- MySQL
+- Maven
+- HTML and CSS
+- Git and GitHub
 
 ## Prerequisites
 
 - JDK 17 or compatible Java installation
-- Maven
 - MySQL Server
 - IntelliJ IDEA or another Java IDE
+- Maven
 
 ## Database Setup
 
-1. Start your MySQL server.
-2. Create the database:
-
-   ```sql
-   CREATE DATABASE project_management;
-   ```
-
-3. Configure the database connection using environment variables:
-
-    - `DB_URL`: `jdbc:mysql://localhost:3306/project_management`
-    - `DB_USER`: your MySQL username
-    - `DB_PASSWORD`: your MySQL password
-
-4. Create the required `users`, `projects`, and `tasks` tables with columns matching the application DAO classes.
+1. Start MySQL Server.
+2. Create a database named `project_management`.
+3. Execute the SQL statements in `database/schema.sql` using MySQL Workbench.
+4. Update the database URL, username, and password in `DBConnection.java` to match your local MySQL configuration.
 
 ## Run the Application
 
-1. Clone or download this repository.
+1. Clone this repository.
 2. Open the project in IntelliJ IDEA.
 3. Reload the Maven project.
-4. Configure the database environment variables.
+4. Verify the database configuration.
 5. Run `ProjectManagementApplication.java`.
 6. Open `http://localhost:8080/login` in your browser.
 
-## Project Structure
+## Repository
 
-```text
-src/
-  com/codenexus/projectmanagement/
-    controller/
-    dao/
-    model/
-    service/
-    util/
-  main/resources/templates/
-    login.html
-    dashboard.html
-    projects.html
-    tasks.html
-    task-form.html
-```
-
-## Future Improvements
-
-- Spring Security and role-based authorization
-- User registration and user management
-- Task assignment to team members
-- Project-task relationships
-- Search, filtering, and pagination
-- Automated tests and deployment
+https://github.com/amanraj8289/OnlineProjectManagementSystem
 
 ## Author
 
-Add your name and GitHub profile here.
+GitHub: [@amanraj8289](https://github.com/amanraj8289)
