@@ -1,4 +1,5 @@
-package com.codenexus.projectmanagement.dao;
+
+        package com.codenexus.projectmanagement.dao;
 
 import com.codenexus.projectmanagement.model.User;
 import com.codenexus.projectmanagement.util.DBConnection;
@@ -7,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +31,11 @@ public class UserDAO {
 
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 if (keys.next()) {
-                    int id = keys.getInt(1);
-                    System.out.println("User saved successfully!");
-                    System.out.println("New User ID: " + id);
-                    return id;
+                    return keys.getInt(1);
                 }
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to save user!");
             e.printStackTrace();
         }
@@ -55,17 +54,11 @@ public class UserDAO {
 
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    return new User(
-                            result.getInt("id"),
-                            result.getString("name"),
-                            result.getString("email"),
-                            result.getString("role"),
-                            result.getString("password")
-                    );
+                    return mapUser(result);
                 }
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to get user!");
             e.printStackTrace();
         }
@@ -84,17 +77,11 @@ public class UserDAO {
 
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    return new User(
-                            result.getInt("id"),
-                            result.getString("name"),
-                            result.getString("email"),
-                            result.getString("role"),
-                            result.getString("password")
-                    );
+                    return mapUser(result);
                 }
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to find user by email!");
             e.printStackTrace();
         }
@@ -114,24 +101,35 @@ public class UserDAO {
             statement.setString(3, user.getRole());
             statement.setInt(4, user.getId());
 
-            int rows = statement.executeUpdate();
+            return statement.executeUpdate() == 1;
 
-            if (rows > 0) {
-                System.out.println("User updated successfully!");
-                return true;
-            }
-
-            System.out.println("User not found for update!");
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to update user!");
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
-    // 5. UPDATE PASSWORD WITH HASH
+    // 5. UPDATE USER ROLE
+    public boolean updateUserRole(int userId, String role) {
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, role);
+            statement.setInt(2, userId);
+
+            return statement.executeUpdate() == 1;
+
+        } catch (SQLException e) {
+            System.out.println("Failed to update user role!");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 6. UPDATE PASSWORD
     public boolean updatePassword(int userId, String hashedPassword) {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
 
@@ -141,24 +139,16 @@ public class UserDAO {
             statement.setString(1, hashedPassword);
             statement.setInt(2, userId);
 
-            int rows = statement.executeUpdate();
+            return statement.executeUpdate() == 1;
 
-            if (rows > 0) {
-                System.out.println("Password updated successfully!");
-                return true;
-            }
-
-            System.out.println("User not found for password update!");
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to update password!");
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
-    // 6. DELETE USER
+    // 7. DELETE USER
     public boolean deleteUser(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
 
@@ -167,24 +157,16 @@ public class UserDAO {
 
             statement.setInt(1, id);
 
-            int rows = statement.executeUpdate();
+            return statement.executeUpdate() == 1;
 
-            if (rows > 0) {
-                System.out.println("User deleted successfully!");
-                return true;
-            }
-
-            System.out.println("User not found for delete!");
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to delete user!");
             e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
-    // 7. GET ALL USERS
+    // 8. GET ALL USERS
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
@@ -194,22 +176,25 @@ public class UserDAO {
              ResultSet result = statement.executeQuery()) {
 
             while (result.next()) {
-                User user = new User(
-                        result.getInt("id"),
-                        result.getString("name"),
-                        result.getString("email"),
-                        result.getString("role"),
-                        result.getString("password")
-                );
-
-                users.add(user);
+                users.add(mapUser(result));
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Failed to get all users!");
             e.printStackTrace();
         }
 
         return users;
+    }
+
+    // 9. MAP DATABASE ROW TO USER
+    private User mapUser(ResultSet result) throws SQLException {
+        return new User(
+                result.getInt("id"),
+                result.getString("name"),
+                result.getString("email"),
+                result.getString("role"),
+                result.getString("password")
+        );
     }
 }

@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Management</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #1e3a8a;
+            color: white;
+            padding: 22px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header h1 { margin: 0; font-size: 24px; }
+
+        .btn {
+            background: white;
+            color: #1e3a8a;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #0000000d;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th { background: #eff6ff; color: #1e3a8a; }
+
+        .role {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        select, button {
+            padding: 9px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+
+        button:hover { background: #1d4ed8; }
+
+        .success { color: #15803d; }
+        .error { color: #b91c1c; }
+
+        @media (max-width: 600px) {
+            header { padding: 18px; }
+            header h1 { font-size: 19px; }
+            .container { padding: 0 12px; }
+            .panel { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Users Management</h1>
+    <a th:href="@{/}" class="btn">Home</a>
+</header>
+
+<main class="container">
+    <section class="panel">
+        <h2>Registered Users</h2>
+        <p>View users and manage their roles.</p>
+
+        <p class="success"
+           th:if="${successMessage}"
+           th:text="${successMessage}"></p>
+
+        <p class="error"
+           th:if="${errorMessage}"
+           th:text="${errorMessage}"></p>
+
+        <p th:if="${#lists.isEmpty(users)}">No users found.</p>
+
+        <table th:unless="${#lists.isEmpty(users)}">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Current Role</th>
+                <th>Update Role</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}">1</td>
+                <td th:text="${user.name}">User Name</td>
+                <td th:text="${user.email}">user@example.com</td>
+                <td>
+                    <span class="role" th:text="${user.role}">TEAM_MEMBER</span>
+                </td>
+                <td>
+                    <form th:action="@{/users/update-role}" method="post">
+                        <input type="hidden"
+                               name="userId"
+                               th:value="${user.id}">
+
+                        <select name="role" required>
+                            <option value="TEAM_MEMBER"
+                                    th:selected="${user.role == 'TEAM_MEMBER'}">
+                                Team Member
+                            </option>
+                            <option value="PROJECT_MANAGER"
+                                    th:selected="${user.role == 'PROJECT_MANAGER'}">
+                                Project Manager
+                            </option>
+                            <option value="ADMIN"
+                                    th:selected="${user.role == 'ADMIN'}">
+                                Admin
+                            </option>
+                        </select>
+
+                        <button type="submit"
+                                onclick="return confirm('Are you sure you want to update this user role?')">
+                            Update
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+</body>
+</html>

@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Project Management Dashboard</title>
 
     <style>
@@ -24,11 +23,28 @@
             background: #2563eb;
             color: white;
             padding: 22px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
         }
 
         header h1 {
             margin: 0;
             font-size: 25px;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #2563eb;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #dbeafe;
         }
 
         .container {
@@ -65,7 +81,6 @@
         }
 
         .card {
-            height: 100%;
             background: white;
             padding: 25px;
             border-radius: 12px;
@@ -109,7 +124,7 @@
             }
 
             header h1 {
-                font-size: 21px;
+                font-size: 19px;
             }
 
             .container {
@@ -129,6 +144,7 @@
 
 <header>
     <h1>Online Project Management System</h1>
+    <a th:href="@{/logout}" class="logout-btn">Logout</a>
 </header>
 
 <div class="container">
@@ -148,7 +164,7 @@
 
     <div class="cards">
 
-        <!-- Projects card -->
+        <!-- Projects -->
         <a href="/projects" class="card-link">
             <div class="card">
                 <h3>Projects</h3>
@@ -157,7 +173,7 @@
             </div>
         </a>
 
-        <!-- Tasks card -->
+        <!-- Tasks -->
         <a href="/tasks" class="card-link">
             <div class="card">
                 <h3>Tasks</h3>
@@ -166,7 +182,7 @@
             </div>
         </a>
 
-        <!-- Activity card -->
+        <!-- Activity -->
         <div class="card">
             <h3>Activity</h3>
             <p>Keep track of project activities.</p>
